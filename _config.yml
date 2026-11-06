@@ -1,0 +1,30 @@
+title: "DEEP LEARNING"
+author: "Keyla Vanessa Alba Molina"
+logo: _static/uninorte_60.png
+
+execute:
+  execute_notebooks: "off"
+
+bibtex_bibfiles:
+  - referencias.bib
+
+html:
+  extra_navbar: |
+    <div class="ka-side-profile">
+      <a class="ka-side-photo-link" href="https://www.uninorte.edu.co/web/maestria-en-estadistica-aplicada?utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=posgrados_google_2024&amp;gad_source=1&amp;gad_campaignid=21112947119&amp;gbraid=0AAAAA9YKQAbAt3H7SQnCsEdOHKTaI-pOb&amp;gclid=EAIaIQobChMIu43KjffxlwMVULlaBR0LqSy-EAAYASAAEgIXKfD_BwE" aria-label="Abrir la página de la Maestría en Estadística Aplicada de la Universidad del Norte">
+        <img class="ka-side-photo" src="_static/foto_docente.png" alt="Fotografía de Keyla Vanessa Alba Molina">
+      </a>
+      <div>
+        <a class="ka-side-name" href="https://www.uninorte.edu.co/web/maestria-en-estadistica-aplicada?utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=posgrados_google_2024&amp;gad_source=1&amp;gad_campaignid=21112947119&amp;gbraid=0AAAAA9YKQAbAt3H7SQnCsEdOHKTaI-pOb&amp;gclid=EAIaIQobChMIu43KjffxlwMVULlaBR0LqSy-EAAYASAAEgIXKfD_BwE">Keyla Vanessa Alba Molina</a>
+        <div class="ka-side-role">Docente<br>Universidad del Norte</div>
+      </div>
+    </div>
+
+sphinx:
+  extra_extensions:
+    - sphinx_proof
+  config:
+    html_static_path:
+      - _static
+    html_css_files:
+      - custom.css

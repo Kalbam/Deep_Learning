@@ -1,0 +1,11 @@
+numpy
+pandas
+matplotlib
+seaborn
+tqdm
+nltk
+beautifulsoup4
+scikit-learn
+scipy
+gensim>=4
+tensorflow
