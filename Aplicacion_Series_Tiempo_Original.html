@@ -1,0 +1,1793 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Aplicación de RNN y LSTM a series de tiempo &#8212; DEEP LEARNING</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3c1f2bfa" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Aplicacion_Series_Tiempo_Original';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Referencias" href="bibliografia.html" />
+    <link rel="prev" title="Aplicación de RNN y LSTM al procesamiento del lenguaje natural" href="Aplicacion_NLP_Kalbam.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/uninorte_60.png" class="logo__image only-light" alt="DEEP LEARNING - Home"/>
+    <img src="_static/uninorte_60.png" class="logo__image only-dark pst-js-only" alt="DEEP LEARNING - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    DEEP LEARNING
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="RNN_LSTM_Model_revisado.html">Redes Neuronales Recurrentes (RNN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aplicacion_NLP_Kalbam.html">Aplicación de RNN y LSTM al procesamiento del lenguaje natural</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Aplicación de RNN y LSTM a series de tiempo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliografia.html">Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Aplicacion_Series_Tiempo_Original.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Aplicación de RNN y LSTM a series de tiempo</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definiciones-de-series-de-tiempo">Definiciones de series de tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#formulacion-del-ejemplo">Formulación del ejemplo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-y-alcance">Datos y alcance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-lstm-para-la-prediccion-de-series-de-tiempo">Aplicación: LSTM para la predicción de series de tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proyecto-integrador-de-series-de-tiempo">Proyecto integrador de series de tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proyecto-integrador-de-deep-learning">Proyecto Integrador de Deep Learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#referencias-de-la-aplicacion">Referencias de la aplicación</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="aplicacion-de-rnn-y-lstm-a-series-de-tiempo">
+<h1>Aplicación de RNN y LSTM a series de tiempo<a class="headerlink" href="#aplicacion-de-rnn-y-lstm-a-series-de-tiempo" title="Link to this heading">#</a></h1>
+<p>En esta aplicación se utiliza una <strong>LSTM</strong> para pronosticar la concentración de
+partículas <strong>PM2.5</strong> a partir de observaciones anteriores. El ejemplo procede del
+archivo <code class="docutils literal notranslate"><span class="pre">ann_model.ipynb</span></code> y conserva sus <strong>celdas de código originales</strong>.</p>
+<p>La LSTM es una arquitectura recurrente. El archivo de origen presenta aquí un
+modelo de <strong>LSTM apiladas</strong>; no incluye en esta aplicación un modelo independiente
+con <code class="docutils literal notranslate"><span class="pre">SimpleRNN</span></code>. La teoría general de RNN y LSTM se encuentra en el capítulo
+correspondiente del libro.</p>
+<figure class="align-center" id="flujo-series-temporales">
+<img alt="Flujo desde observaciones PM2.5 hasta predicción con LSTM y evaluación." src="_images/flujo_series_temporales.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Flujo del ejemplo extraído: lectura, partición temporal, escalado, construcción de
+ventanas, LSTM, predicción y evaluación.</span><a class="headerlink" href="#flujo-series-temporales" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<section id="definiciones-de-series-de-tiempo">
+<h2>Definiciones de series de tiempo<a class="headerlink" href="#definiciones-de-series-de-tiempo" title="Link to this heading">#</a></h2>
+<p>Una <strong>serie de tiempo</strong> es una colección de observaciones ordenadas según el instante
+en que se registran. Puede representarse como:</p>
+<div class="math notranslate nohighlight">
+\[
+y_1,y_2,\dots,y_T,
+\]</div>
+<p>donde <span class="math notranslate nohighlight">\(y_t\)</span> es el valor observado en el instante <span class="math notranslate nohighlight">\(t\)</span>. En el ejemplo, la variable
+seleccionada es la concentración de PM2.5.</p>
+<ul class="simple">
+<li><p><strong>Frecuencia:</strong> intervalo previsto entre registros, como una hora o un día. Es
+importante verificar si existen observaciones faltantes o irregulares.</p></li>
+<li><p><strong>Tendencia:</strong> evolución general de la serie a lo largo del tiempo.</p></li>
+<li><p><strong>Estacionalidad:</strong> patrón que se repite aproximadamente con cierta frecuencia,
+como un comportamiento diario o anual.</p></li>
+<li><p><strong>Rezago</strong> (<em>lag</em>): valor observado en un instante anterior al de referencia.</p></li>
+<li><p><strong>Ventana temporal:</strong> conjunto de observaciones pasadas utilizado como entrada.</p></li>
+<li><p><strong>Horizonte de predicción:</strong> distancia temporal o número de pasos entre la última
+información disponible y el valor que se busca pronosticar.</p></li>
+<li><p><strong>Residuo o error de predicción:</strong> diferencia entre el valor observado y el
+pronosticado, por ejemplo <span class="math notranslate nohighlight">\(e_t=y_t-\hat y_t\)</span>.</p></li>
+</ul>
+</section>
+<section id="formulacion-del-ejemplo">
+<h2>Formulación del ejemplo<a class="headerlink" href="#formulacion-del-ejemplo" title="Link to this heading">#</a></h2>
+<p>La función <code class="docutils literal notranslate"><span class="pre">makeXy</span></code> utiliza <strong>siete observaciones anteriores</strong> para predecir la
+siguiente. De forma esquemática:</p>
+<div class="math notranslate nohighlight">
+\[
+\underbrace{(y_{t-6},\dots,y_t)}_{\text{ventana de entrada}}
+\longrightarrow
+\underbrace{y_{t+1}}_{\text{objetivo}}.
+\]</div>
+<p>Tras el escalado, el arreglo de entrada de la LSTM tiene la forma
+<span class="math notranslate nohighlight">\((\text{muestras},7,1)\)</span>: <strong>siete pasos</strong> y una característica por paso.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>El conjunto de datos tiene registros horarios, pero el código elimina filas con
+PM2.5 faltante. Por ello, siete observaciones consecutivas del arreglo <strong>no están
+garantizadas como siete horas consecutivas</strong> si existen huecos en las fechas. No
+se trata de una ventana de siete días.</p>
+</div>
+</section>
+<section id="datos-y-alcance">
+<h2>Datos y alcance<a class="headerlink" href="#datos-y-alcance" title="Link to this heading">#</a></h2>
+<p>El ejemplo usa el conjunto de contaminación atmosférica de Pekín, disponible en el
+<a class="reference external" href="https://archive.ics.uci.edu/dataset/381/beijing+pm2+5+data">repositorio UCI</a>. La
+celda original lo lee desde una copia en GitHub; su dirección se conserva sin cambios.
+La descarga requiere conexión a internet.</p>
+<p>El código divide los registros cronológicamente: antes de 2014 se emplean para
+<strong>entrenamiento</strong> y los posteriores para <strong>validación</strong>. No se define un tercer
+conjunto de prueba independiente.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Se conservan las salidas originales que estaban guardadas en el notebook. No se han
+recalculado en esta extracción y pueden depender de archivos y modelos previos.</p>
+</div>
+<p>Se conserva la aplicación LSTM del archivo de origen y se presentan las tareas del proyecto de series de tiempo orientadas a <strong>RNN o LSTM</strong>.</p>
+</section>
+<section id="aplicacion-lstm-para-la-prediccion-de-series-de-tiempo">
+<h2>Aplicación: LSTM para la predicción de series de tiempo<a class="headerlink" href="#aplicacion-lstm-para-la-prediccion-de-series-de-tiempo" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Continuaremos usando el conjunto de datos sobre contaminación del aire (<code class="docutils literal notranslate"><span class="pre">pm2.5</span></code>) usando LSTM. La lectura y el <em><strong>preprocesamiento de los datos se presentan en las celdas siguientes</strong></em>. El conjunto de datos original se divide en dos conjuntos: <em>entrenamiento y validación</em>, que se usan para el entrenamiento y validación del modelo respectivamente.</p></li>
+</ul>
+<ul class="simple">
+<li><p>La función <code class="docutils literal notranslate"><span class="pre">makeXy</span></code> se utiliza para generar arreglos de regresores y objetivos: <code class="docutils literal notranslate"><span class="pre">X_train,</span> <span class="pre">X_val,</span> <span class="pre">y_train</span></code> y <code class="docutils literal notranslate"><span class="pre">y_val</span></code>. <code class="docutils literal notranslate"><span class="pre">X_train</span> <span class="pre">y</span> <span class="pre">X_val</span></code>, generados por la función <code class="docutils literal notranslate"><span class="pre">makeXy</span></code>, son <em><strong>arreglos 2D de forma (número de muestras, número de pasos de tiempo)</strong></em>. Sin embargo, la <em><strong>entrada a las capas RNN debe ser de forma (número de muestras, número de pasos de tiempo, número de características por paso de tiempo)</strong></em>.</p></li>
+<li><p>En este caso, estamos tratando solo con <code class="docutils literal notranslate"><span class="pre">pm2.5</span></code>, por lo tanto, el <em><strong>número de características por paso de tiempo es uno</strong></em>. El número de pasos de tiempo es siete y el número de muestras es el mismo que el número de muestras en <code class="docutils literal notranslate"><span class="pre">X_train</span></code> y <code class="docutils literal notranslate"><span class="pre">X_val</span></code>, que se transforman a arreglos 3D</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/lihkir/Data/refs/heads/main/PRSA_data_2010.1.1-2014.12.31.csv&#39;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="k">lambda</span> <span class="n">column</span><span class="p">:</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;DEWP&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;cbwd&#39;</span><span class="p">,</span> <span class="s1">&#39;Iws&#39;</span><span class="p">,</span>	<span class="s1">&#39;Is&#39;</span><span class="p">,</span> <span class="s1">&#39;Ir&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of the dataframe:&#39;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of the dataframe: (43824, 7)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>No</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>hour</th>
+      <th>pm2.5</th>
+      <th>PRES</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>1021.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>1020.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>NaN</td>
+      <td>1019.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>1019.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+      <td>NaN</td>
+      <td>1018.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="n">month</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">],</span> <span class="n">day</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">],</span>
+                                                                                          <span class="n">hour</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> 
+<span class="n">g1</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">],</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Box plot of pm2.5&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">);</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">g2</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">])</span>
+<span class="n">g2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Time series of pm2.5&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;pm2.5 readings&#39;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3f3c9d3bf4eb393bed8d5d446965e47fa951dd63f812c0d73da71956b7014ff3.png" src="_images/3f3c9d3bf4eb393bed8d5d446965e47fa951dd63f812c0d73da71956b7014ff3.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">g1</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">2010</span><span class="p">,</span><span class="n">month</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">30</span><span class="p">)],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;pm2.5 during 2010&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;pm2.5 readings&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">2010</span><span class="p">,</span><span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">31</span><span class="p">)],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Zoom in on one month: pm2.5 during Jan 2010&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;pm2.5 readings&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/663b73103710501a00af3e61cdc6b5843d1d1fdd051bfab6d2ce0ce7ebeb9d2b.png" src="_images/663b73103710501a00af3e61cdc6b5843d1d1fdd051bfab6d2ce0ce7ebeb9d2b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">split_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">2014</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">&lt;</span><span class="n">split_date</span><span class="p">]</span>
+<span class="n">df_val</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">split_date</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of train:&#39;</span><span class="p">,</span> <span class="n">df_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of test:&#39;</span><span class="p">,</span> <span class="n">df_val</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of train: (33096, 8)
+Shape of test: (8661, 8)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>No</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>hour</th>
+      <th>pm2.5</th>
+      <th>PRES</th>
+      <th>datetime</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>25</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>129.0</td>
+      <td>1020.0</td>
+      <td>2010-01-02 00:00:00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>26</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>148.0</td>
+      <td>1020.0</td>
+      <td>2010-01-02 01:00:00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>27</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>159.0</td>
+      <td>1021.0</td>
+      <td>2010-01-02 02:00:00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>28</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>181.0</td>
+      <td>1022.0</td>
+      <td>2010-01-02 03:00:00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>29</td>
+      <td>2010</td>
+      <td>1</td>
+      <td>2</td>
+      <td>4</td>
+      <td>138.0</td>
+      <td>1022.0</td>
+      <td>2010-01-02 04:00:00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_val</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>No</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>hour</th>
+      <th>pm2.5</th>
+      <th>PRES</th>
+      <th>datetime</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>33096</th>
+      <td>35065</td>
+      <td>2014</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>24.0</td>
+      <td>1014.0</td>
+      <td>2014-01-01 00:00:00</td>
+    </tr>
+    <tr>
+      <th>33097</th>
+      <td>35066</td>
+      <td>2014</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>53.0</td>
+      <td>1013.0</td>
+      <td>2014-01-01 01:00:00</td>
+    </tr>
+    <tr>
+      <th>33098</th>
+      <td>35067</td>
+      <td>2014</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>65.0</td>
+      <td>1013.0</td>
+      <td>2014-01-01 02:00:00</td>
+    </tr>
+    <tr>
+      <th>33099</th>
+      <td>35068</td>
+      <td>2014</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+      <td>70.0</td>
+      <td>1013.0</td>
+      <td>2014-01-01 03:00:00</td>
+    </tr>
+    <tr>
+      <th>33100</th>
+      <td>35069</td>
+      <td>2014</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+      <td>79.0</td>
+      <td>1012.0</td>
+      <td>2014-01-01 04:00:00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_val</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler_pm25</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;scaled_pm2.5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaler_pm25</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_train</span><span class="p">[[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">]])</span>
+<span class="n">df_val</span><span class="p">[</span><span class="s1">&#39;scaled_pm2.5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaler_pm25</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df_val</span><span class="p">[[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">]])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of train:&#39;</span><span class="p">,</span> <span class="n">df_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of val:&#39;</span><span class="p">,</span> <span class="n">df_val</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of train: (33096, 9)
+Shape of val: (8661, 9)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">g1</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;scaled_pm2.5&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Time series of scaled pm2.5 in train set&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Scaled pm2.5 readings&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">g2</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">df_val</span><span class="p">[</span><span class="s1">&#39;scaled_pm2.5&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">g2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Time series of scaled pm2.5 in validation set&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">)</span>
+<span class="n">g2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Scaled pm2.5 readings&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">plot_fontsize</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b9593c04173933a98aba5527c1cfb9f1515177203be924e7527f3d0c06219181.png" src="_images/b9593c04173933a98aba5527c1cfb9f1515177203be924e7527f3d0c06219181.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">makeXy</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">nb_timesteps</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Input: </span>
+<span class="sd">           ts: original time series</span>
+<span class="sd">           nb_timesteps: number of time steps in the regressors</span>
+<span class="sd">    Output: </span>
+<span class="sd">           X: 2-D array of regressors</span>
+<span class="sd">           y: 1-D array of target </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_timesteps</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">-</span><span class="n">nb_timesteps</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">nb_timesteps</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">nb_timesteps</span><span class="p">:</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span> <span class="c1">#Regressors</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="c1">#Target</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">makeXy</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;scaled_pm2.5&#39;</span><span class="p">],</span> <span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 6 7
+1 7 8
+2 8 9
+3 9 10
+4 10 11
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of train arrays:&#39;</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of train arrays: (33089, 7) (33089,)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span> <span class="o">=</span> <span class="n">makeXy</span><span class="p">(</span><span class="n">df_val</span><span class="p">[</span><span class="s1">&#39;scaled_pm2.5&#39;</span><span class="p">],</span> <span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 6 7
+1 7 8
+2 8 9
+3 9 10
+4 10 11
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of validation arrays:&#39;</span><span class="p">,</span> <span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_val</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of validation arrays: (8654, 7) (8654,)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_val</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">X_val</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Shape of 3D arrays:&#39;</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of 3D arrays: (33089, 7, 1) (8654, 7, 1)
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X_train</span></code> y <code class="docutils literal notranslate"><span class="pre">X_val</span></code> se han <em><strong>convertido en matrices 3D</strong></em> y sus nuevas formas se ven en la salida de la instrucción de impresión anterior</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">keras.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Dropout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">keras.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">LSTM</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">keras.optimizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">keras.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">keras.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">keras.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelCheckpoint</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-11-06 14:34:18.360171: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-06 14:34:18.401702: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX_VNNI, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-06 14:34:19.339663: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>La red neuronal para desarrollar el modelo de predicción de series temporales tiene una <em><strong>capa de entrada, que alimenta a la capa LSTM</strong></em>. La capa LSTM tiene <em><strong>siete pasos temporales</strong></em>, que es el mismo número de observaciones históricas tomadas para hacer la predicción de la presión atmosférica para el día siguiente. Solo <em><strong>el último paso temporal de la LSTM devuelve una salida</strong></em>.</p></li>
+<li><p>Hay <em><strong>sesenta y cuatro neuronas ocultas en cada paso temporal de la capa LSTM</strong></em>. Por lo tanto, la salida de la LSTM tiene sesenta y cuatro
+características:</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>La descripción original anterior menciona presión y 64 características. En el código de esta aplicación, la variable es <strong>PM2.5</strong> y se usan <strong>dos LSTM</strong>: la primera de 64 unidades y la segunda de 32. La ventana comprende siete observaciones y la salida pronostica la siguiente.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_layer</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Aquí <code class="docutils literal notranslate"><span class="pre">shape=(7,1)</span></code> forma de la <em><strong>entrada a la LSTM</strong></em>. <code class="docutils literal notranslate"><span class="pre">7</span></code>: Número de <em><strong>pasos de tiempo (timesteps)</strong></em>. <code class="docutils literal notranslate"><span class="pre">1</span></code>: Número de <em><strong>características (features) por cada paso de tiempo</strong></em>. <code class="docutils literal notranslate"><span class="pre">return_sequences=True</span></code> se usa cuando se necesita <em><strong>pasar la secuencia completa de salidas a la siguiente capa de la red</strong></em>, que también puede ser una capa recurrente como otra LSTM</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lstm_layer1</span> <span class="o">=</span> <span class="n">LSTM</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">return_sequences</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">input_layer</span><span class="p">)</span>
+<span class="n">lstm_layer2</span> <span class="o">=</span> <span class="n">LSTM</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">64</span><span class="p">),</span> <span class="n">return_sequences</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">lstm_layer1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793993661.194119    3692 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 5262 MB memory:  -&gt; device: 0, name: NVIDIA GeForce RTX 5050 Laptop GPU, pci bus id: 0000:01:00.0, compute capability: 12.0
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>A continuación, <em><strong>la salida de LSTM pasa a una capa de exclusión que elimina aleatoriamente el 20% de la entrada antes de pasar a la capa de salida</strong></em>, que tiene una única neurona oculta con una función de <em><strong>activación lineal</strong></em></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dropout_layer</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)(</span><span class="n">lstm_layer2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output_layer</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)(</span><span class="n">dropout_layer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Finalmente, todas las capas se envuelven en un <code class="docutils literal notranslate"><span class="pre">keras.models.Model</span></code> y se entrenan durante <em><strong>veinte epochs para minimizar el MSE</strong></em> utilizando el <em><strong>optimizador Adam</strong></em></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>La descripción anterior menciona MSE y veinte épocas. Las celdas de código que siguen configuran <strong>MAE</strong> como pérdida y un máximo de <strong>120 épocas</strong>, con parada temprana. Se conservan ambos textos originales y se señala la diferencia.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">input_layer</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">output_layer</span><span class="p">)</span>
+<span class="n">ts_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">)</span> <span class="c1">#SGD(lr=0.001, decay=1e-5))</span>
+<span class="n">ts_model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "functional"</span>
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> Layer (type)                    </span>┃<span style="font-weight: bold"> Output Shape           </span>┃<span style="font-weight: bold">       Param # </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ input_layer (<span style="color: #0087ff; text-decoration-color: #0087ff">InputLayer</span>)        │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">7</span>, <span style="color: #00af00; text-decoration-color: #00af00">1</span>)           │             <span style="color: #00af00; text-decoration-color: #00af00">0</span> │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ lstm (<span style="color: #0087ff; text-decoration-color: #0087ff">LSTM</span>)                     │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">7</span>, <span style="color: #00af00; text-decoration-color: #00af00">64</span>)          │        <span style="color: #00af00; text-decoration-color: #00af00">16,896</span> │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ lstm_1 (<span style="color: #0087ff; text-decoration-color: #0087ff">LSTM</span>)                   │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">32</span>)             │        <span style="color: #00af00; text-decoration-color: #00af00">12,416</span> │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dropout (<span style="color: #0087ff; text-decoration-color: #0087ff">Dropout</span>)               │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">32</span>)             │             <span style="color: #00af00; text-decoration-color: #00af00">0</span> │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                   │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">1</span>)              │            <span style="color: #00af00; text-decoration-color: #00af00">33</span> │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Total params: </span><span style="color: #00af00; text-decoration-color: #00af00">29,345</span> (114.63 KB)
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Trainable params: </span><span style="color: #00af00; text-decoration-color: #00af00">29,345</span> (114.63 KB)
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Non-trainable params: </span><span style="color: #00af00; text-decoration-color: #00af00">0</span> (0.00 B)
+</pre>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">dump</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">keras.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarlyStopping</span><span class="p">,</span> <span class="n">ModelCheckpoint</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_weights_at</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;keras_models&#39;</span><span class="p">,</span> <span class="s1">&#39;PRSA_data_PM2.5_LSTM_weights.</span><span class="si">{epoch:02d}</span><span class="s1">-</span><span class="si">{val_loss:.4f}</span><span class="s1">.keras&#39;</span><span class="p">)</span>
+
+<span class="n">checkpointer</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">EarlyStopping</span><span class="p">(</span>
+        <span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span>  
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">restore_best_weights</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span>
+        <span class="n">patience</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">),</span>
+    <span class="n">ModelCheckpoint</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="n">save_weights_at</span><span class="p">,</span>
+        <span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">save_best_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">save_weights_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span>
+        <span class="n">save_freq</span><span class="o">=</span><span class="s1">&#39;epoch&#39;</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">history_pm25_LSTM</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;history_pm25_LSTM.joblib&#39;</span><span class="p">):</span>
+    <span class="n">history_pm25_LSTM</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;history_pm25_LSTM.joblib&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;El archivo &#39;history_pm25_LSTM.joblib&#39; ya existe. Se ha cargado el historial del entrenamiento.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">history_pm25_LSTM</span> <span class="o">=</span> <span class="n">ts_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> 
+        <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span> 
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> 
+        <span class="n">epochs</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+        <span class="n">callbacks</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+        <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">),</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">dump</span><span class="p">(</span><span class="n">history_pm25_LSTM</span><span class="o">.</span><span class="n">history</span><span class="p">,</span> <span class="s1">&#39;history_pm25_LSTM.joblib&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;El entrenamiento se ha completado y el historial ha sido guardado en &#39;history_pm25_LSTM.joblib&#39;.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/120
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>I0000 00:00:1793993664.876623    4222 cuda_dnn.cc:530] Loaded cuDNN version 92301
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1: val_loss improved from None to 0.01231, saving model to keras_models/PRSA_data_PM2.5_LSTM_weights.01-0.0123.keras
+
+Epoch 1: finished saving model to keras_models/PRSA_data_PM2.5_LSTM_weights.01-0.0123.keras
+2069/2069 - 21s - 10ms/step - loss: 0.0194 - val_loss: 0.0123
+Epoch 2/120
+
+Epoch 2: val_loss did not improve from 0.01231
+2069/2069 - 20s - 10ms/step - loss: 0.0152 - val_loss: 0.0132
+Epoch 3/120
+
+Epoch 3: val_loss improved from 0.01231 to 0.01202, saving model to keras_models/PRSA_data_PM2.5_LSTM_weights.03-0.0120.keras
+
+Epoch 3: finished saving model to keras_models/PRSA_data_PM2.5_LSTM_weights.03-0.0120.keras
+2069/2069 - 18s - 9ms/step - loss: 0.0152 - val_loss: 0.0120
+Epoch 4/120
+
+Epoch 4: val_loss did not improve from 0.01202
+2069/2069 - 19s - 9ms/step - loss: 0.0149 - val_loss: 0.0143
+Epoch 5/120
+
+Epoch 5: val_loss did not improve from 0.01202
+2069/2069 - 19s - 9ms/step - loss: 0.0149 - val_loss: 0.0128
+Epoch 6/120
+
+Epoch 6: val_loss improved from 0.01202 to 0.01160, saving model to keras_models/PRSA_data_PM2.5_LSTM_weights.06-0.0116.keras
+
+Epoch 6: finished saving model to keras_models/PRSA_data_PM2.5_LSTM_weights.06-0.0116.keras
+2069/2069 - 18s - 9ms/step - loss: 0.0149 - val_loss: 0.0116
+Epoch 7/120
+
+Epoch 7: val_loss did not improve from 0.01160
+2069/2069 - 21s - 10ms/step - loss: 0.0148 - val_loss: 0.0125
+Epoch 8/120
+
+Epoch 8: val_loss did not improve from 0.01160
+2069/2069 - 17s - 8ms/step - loss: 0.0147 - val_loss: 0.0119
+Epoch 9/120
+
+Epoch 9: val_loss did not improve from 0.01160
+2069/2069 - 18s - 9ms/step - loss: 0.0147 - val_loss: 0.0119
+Epoch 10/120
+
+Epoch 10: val_loss did not improve from 0.01160
+2069/2069 - 18s - 9ms/step - loss: 0.0148 - val_loss: 0.0122
+Epoch 11/120
+
+Epoch 11: val_loss did not improve from 0.01160
+2069/2069 - 18s - 9ms/step - loss: 0.0147 - val_loss: 0.0122
+Epoch 12/120
+
+Epoch 12: val_loss did not improve from 0.01160
+2069/2069 - 17s - 8ms/step - loss: 0.0147 - val_loss: 0.0117
+Epoch 13/120
+
+Epoch 13: val_loss did not improve from 0.01160
+2069/2069 - 20s - 10ms/step - loss: 0.0147 - val_loss: 0.0120
+Epoch 14/120
+
+Epoch 14: val_loss did not improve from 0.01160
+2069/2069 - 20s - 9ms/step - loss: 0.0147 - val_loss: 0.0125
+Epoch 15/120
+
+Epoch 15: val_loss did not improve from 0.01160
+2069/2069 - 18s - 9ms/step - loss: 0.0146 - val_loss: 0.0117
+Epoch 16/120
+
+Epoch 16: val_loss did not improve from 0.01160
+2069/2069 - 19s - 9ms/step - loss: 0.0147 - val_loss: 0.0123
+Epoch 16: early stopping
+Restoring model weights from the end of the best epoch: 6.
+El entrenamiento se ha completado y el historial ha sido guardado en &#39;history_pm25_LSTM.joblib&#39;.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_dir</span> <span class="o">=</span> <span class="s1">&#39;keras_models&#39;</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
+<span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;PRSA_data_PM2.5_LSTM_weights\.(\d+)-([\d\.]+)\.keras&quot;</span>
+    
+<span class="n">best_val_loss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+<span class="n">best_model_file</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">best_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">epoch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">val_loss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">val_loss</span> <span class="o">&lt;</span> <span class="n">best_val_loss</span><span class="p">:</span>
+            <span class="n">best_val_loss</span> <span class="o">=</span> <span class="n">val_loss</span>
+            <span class="n">best_model_file</span> <span class="o">=</span> <span class="n">file</span>
+
+<span class="k">if</span> <span class="n">best_model_file</span><span class="p">:</span>
+    <span class="n">best_model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_dir</span><span class="p">,</span> <span class="n">best_model_file</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cargando el mejor modelo: </span><span class="si">{</span><span class="n">best_model_file</span><span class="si">}</span><span class="s2"> con val_loss: </span><span class="si">{</span><span class="n">best_val_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">best_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="n">best_model_path</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No se encontraron archivos de modelos que coincidan con el patrón.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cargando el mejor modelo: PRSA_data_PM2.5_LSTM_weights.06-0.0116.keras con val_loss: 0.0116
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>
+<span class="n">pred_pm25</span> <span class="o">=</span> <span class="n">scaler_pm25</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
+<span class="n">pred_pm25</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">pred_pm25</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">271/271</span> <span class=" -Color -Color-Green">━━━━━━━━━━━━━━━━━━━━</span> <span class=" -Color -Color-Bold">1s</span> 3ms/step
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_absolute_error</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">df_val</span><span class="p">[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">7</span><span class="p">:],</span> <span class="n">pred_pm25</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MAE for the validation set:&#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">mae</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE for the validation set: 11.5308
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Hemos utilizado <code class="docutils literal notranslate"><span class="pre">keras.callbacks.ModelCheckpoint</span></code> como callback para rastrear el <code class="docutils literal notranslate"><span class="pre">MSE</span></code> del modelo en el conjunto de validación y <em><strong>guardar los pesos de la epoch que da el mínimo MSE</strong></em>. El <code class="docutils literal notranslate"><span class="pre">R-cuadrado</span></code> del mejor modelo para el conjunto de validación es de 0.9959. Los primeros cincuenta valores reales y predichos se muestran en la siguiente figura</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>La celda de evaluación original calcula <strong>MAE</strong>, no <span class="math notranslate nohighlight">\(R^2\)</span>. La cifra de <span class="math notranslate nohighlight">\(R^2\)</span> mencionada en el texto anterior no queda verificada por las celdas de esta aplicación.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">df_val</span><span class="p">[</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">56</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">pred_pm25</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Actual&#39;</span><span class="p">,</span><span class="s1">&#39;Predicted&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Actual vs Predicted pm2.5&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;pm2.5&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Index&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c85e96a8c27c571f73e958b1845d3273778ea2db51dc46349b5cd3d3b2f5ed6d.png" src="_images/c85e96a8c27c571f73e958b1845d3273778ea2db51dc46349b5cd3d3b2f5ed6d.png" />
+</div>
+</div>
+</section>
+<section id="proyecto-integrador-de-series-de-tiempo">
+<h2>Proyecto integrador de series de tiempo<a class="headerlink" href="#proyecto-integrador-de-series-de-tiempo" title="Link to this heading">#</a></h2>
+<p>Se mantienen los <strong>objetivos, datos y tareas</strong> del proyecto del archivo original, orientando la actividad de modelado a una <strong>RNN o LSTM</strong>. Se omiten únicamente los ejemplos específicos del modelo retirado. Los fragmentos de código que se conservan permanecen <strong>sin cambios</strong>.</p>
+</section>
+<section id="proyecto-integrador-de-deep-learning">
+<h2>Proyecto Integrador de Deep Learning<a class="headerlink" href="#proyecto-integrador-de-deep-learning" title="Link to this heading">#</a></h2>
+<p><strong>Objetivo</strong></p>
+<ul class="simple">
+<li><p>El proyecto busca <strong>predecir una variable temporal de interés</strong>, como el <strong>precio de cierre de criptomonedas</strong> o la <strong>velocidad del viento</strong>, utilizando exclusivamente su <strong>histórico temporal</strong> (por ejemplo, fecha y valores observados). Para ello, se emplea la librería <a class="reference external" href="https://pypi.org/project/timeseries-cv/">timeseries-cv</a>, junto con <strong>estrategias de validación temporal</strong>, un modelo recurrente RNN o LSTM y un análisis riguroso de residuos.</p></li>
+<li><p>Adicionalmente, se propone <strong>construir, validar y desplegar un modelo robusto de deep learning</strong>, orientado tanto a la <strong>predicción del nivel de la serie</strong> como a la <strong>modelación de su volatilidad o variabilidad</strong>, partiendo únicamente de observaciones históricas.</p></li>
+<li><p>El flujo de trabajo incluye:</p>
+<ul>
+<li><p>Exploración y caracterización de la variabilidad de la serie</p></li>
+<li><p>Construcción de ventanas temporales</p></li>
+<li><p>Validación cruzada para datos secuenciales</p></li>
+<li><p>Evaluación mediante métricas específicas</p></li>
+<li><p>Análisis de residuos</p></li>
+</ul>
+</li>
+<li><p>Todo ello con el objetivo final de su <strong>despliegue en un entorno de MLOps</strong>.
+<strong>Contexto</strong></p></li>
+<li><p>Las series temporales asociadas a <strong>criptomonedas</strong> y a <strong>variables ambientales como la velocidad del viento</strong> comparten características fundamentales como:</p>
+<ul>
+<li><p>Alta variabilidad</p></li>
+<li><p>No linealidad</p></li>
+<li><p>Dependencia temporal compleja</p></li>
+<li><p>Posibles cambios de régimen</p></li>
+</ul>
+</li>
+<li><p>Estas propiedades representan tanto un desafío como una oportunidad para el desarrollo de modelos predictivos avanzados. En el caso de las criptomonedas, la alta volatilidad impacta directamente en:</p>
+<ul>
+<li><p>Trading algorítmico</p></li>
+<li><p>Gestión de portafolios</p></li>
+<li><p>Estimación de riesgos</p></li>
+</ul>
+</li>
+<li><p>Por su parte, en el ámbito energético y ambiental, la predicción de la velocidad del viento es clave para:</p>
+<ul>
+<li><p>Planificación de sistemas de generación eólica</p></li>
+<li><p>Optimización operativa</p></li>
+<li><p>Gestión de incertidumbre en energías renovables</p></li>
+</ul>
+</li>
+<li><p>En ambos contextos, si bien la predicción puntual de la serie es relevante, <strong>modelar y anticipar la variabilidad o volatilidad proporciona una base más robusta para la toma de decisiones bajo incertidumbre</strong>.</p></li>
+<li><p>Por ello, el <em>forecasting</em> de series temporales, cuando se aborda de manera <strong>rigurosa, reproducible y orientada a datos reales</strong>, se consolida como una tarea central en la ciencia de datos aplicada tanto a sistemas financieros como a sistemas energéticos y ambientales.</p></li>
+<li><p><strong>Datasets recomendados:</strong></p>
+<ul>
+<li><p>Fuente: <a class="reference external" href="https://www.binance.com/en/binance-api">Binance Public API</a>. API gratuita, sin registro, y es la fuente más citada en literatura académica de alta frecuencia. <strong>Seleccione la criptomoneda de su interés para esta tarea o el dataset de velocidad del viento</strong>. Ejemplo de uso de la API de Binance</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span><span class="o">,</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_binance_1m</span><span class="p">(</span><span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;BTCUSDT&quot;</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2024-01-31&quot;</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://api.binance.com/api/v3/klines&quot;</span>
+    <span class="n">start_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">end_ms</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">end</span><span class="p">,</span>   <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">all_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">while</span> <span class="n">start_ms</span> <span class="o">&lt;</span> <span class="n">end_ms</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
+            <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="s2">&quot;1m&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;startTime&quot;</span><span class="p">:</span> <span class="n">start_ms</span><span class="p">,</span>
+            <span class="s2">&quot;endTime&quot;</span><span class="p">:</span> <span class="n">end_ms</span><span class="p">,</span>
+            <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">1000</span>
+        <span class="p">}</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span> <span class="k">break</span>
+        <span class="n">all_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">start_ms</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">60000</span>  <span class="c1"># avanza 1 minuto</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># evita rate limit</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;open_time&quot;</span><span class="p">,</span><span class="s2">&quot;open&quot;</span><span class="p">,</span><span class="s2">&quot;high&quot;</span><span class="p">,</span><span class="s2">&quot;low&quot;</span><span class="p">,</span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;close_time&quot;</span><span class="p">,</span><span class="s2">&quot;quote_volume&quot;</span><span class="p">,</span><span class="s2">&quot;trades&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;taker_buy_base&quot;</span><span class="p">,</span><span class="s2">&quot;taker_buy_quote&quot;</span><span class="p">,</span><span class="s2">&quot;ignore&quot;</span>
+    <span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;open_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;open_time&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;ms&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;open&quot;</span><span class="p">,</span><span class="s2">&quot;high&quot;</span><span class="p">,</span><span class="s2">&quot;low&quot;</span><span class="p">,</span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="s2">&quot;volume&quot;</span><span class="p">]]</span> <span class="o">=</span> \
+        <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;open&quot;</span><span class="p">,</span><span class="s2">&quot;high&quot;</span><span class="p">,</span><span class="s2">&quot;low&quot;</span><span class="p">,</span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="s2">&quot;volume&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;open_time&quot;</span><span class="p">,</span><span class="s2">&quot;open&quot;</span><span class="p">,</span><span class="s2">&quot;high&quot;</span><span class="p">,</span><span class="s2">&quot;low&quot;</span><span class="p">,</span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span><span class="s2">&quot;trades&quot;</span><span class="p">]]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">get_binance_1m</span><span class="p">(</span><span class="s2">&quot;BTCUSDT&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-03-31&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;btc_1m_Q1_2024.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Frecuencia: 1 minuto.</p></li>
+<li><p>Variable clave: Precio de Cierre (<code class="docutils literal notranslate"><span class="pre">Close</span></code>)</p></li>
+<li><p><strong>Cálculo de la volatilidad: definición formal y ejemplo:</strong></p>
+<ul>
+<li><p>La volatilidad es una medida de <strong>dispersión de los rendimientos de un activo financiero</strong>.</p></li>
+<li><p>Para una ventana de tamaño <span class="math notranslate nohighlight">\(n\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \sigma_t = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (r_{t-i} - \bar{r})^2},~\text{donde}~r_t = \ln\left(\frac{P_t}{P_{t-1}}\right)
+    \]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_t\)</span>: Precio de cierre en el día <span class="math notranslate nohighlight">\(t\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(r_t\)</span>: Retorno logarítmico diario</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_t\)</span>: Volatilidad histórica realizada en ventana de <span class="math notranslate nohighlight">\(n\)</span> días</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{r}\)</span>: Promedio de los retornos en la ventana</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+<li><p>Datos del <a class="reference external" href="https://portal.inmet.gov.br/dadoshistoricos">INMET - National Institute of Meteorology</a> relacionados con velocidad del viento. La variable respuesta en este caso es la velocidad de viento suministrada de forma horaria por INMET. <strong>Debe seleccionar solo un dataset, el de velocidad del viento o el de criptomonedas</strong>.</p></li>
+</ul>
+<ul>
+<li><p><strong>Actividades a desarrollar</strong>. Cada resultado debe ir acompañado de <strong>análisis, justificación y visualización/tablas</strong> cuando sea relevante.</p>
+<ul class="simple">
+<li><p><strong>Análisis Exploratorio de Datos (EDA)</strong></p></li>
+<li><p>Estadísticas descriptivas de precios y retornos.</p></li>
+<li><p>Visualizaciones: serie de precios, retornos diarios, histograma de retornos, autocorrelación (ACF) y ACF de cuadrados (para heterocedasticidad).</p></li>
+<li><p><strong>Preprocesamiento y cálculo de features</strong></p></li>
+<li><p>Cálculo de <strong>retornos logarítmicos</strong>.</p></li>
+<li><p>Cálculo de <strong>volatilidad histórica (rolling std)</strong> para inspección (variable objetivo alternativa).</p></li>
+<li><p>Generación de <strong>lags del precio</strong> (ventanas previas) para los siguientes tamaños: 7, 14, 21, 28 días.</p></li>
+<li><p>Generación de <strong>targets multi-step</strong>: horizonte de 7 días (salida multisalida de longitud 7).</p></li>
+<li><p><strong>Split temporal y validación cruzada</strong></p></li>
+<li><p>Usar <code class="docutils literal notranslate"><span class="pre">split_train_val_test_groupKFold</span></code> (de <a class="reference external" href="https://pypi.org/project/timeseries-cv/"><strong>timeseries-cv / tsxv</strong></a>) para crear splits <strong>train / val / test</strong> sin data leakage.</p></li>
+<li><p>Escalado: <strong>fit del scaler solo con el train</strong> en cada fold; transformar val/test con ese scaler.</p></li>
+<li><p><strong>Modelado con Deep Learning</strong></p></li>
+<li><p>Entrenar una <strong>RNN o LSTM multisalida</strong> con horizonte 7, fold a fold.</p></li>
+<li><p>Guardar por fold: <strong>predicciones para train, val y test</strong> (todas las muestras del fold).</p></li>
+<li><p>Evaluación: calcular <strong>métricas por horizonte (1..7) y agregadas (promedio sobre horizontes)</strong>.</p></li>
+<li><p><strong>Métricas obligatorias — tablas por tamaño de input</strong></p></li>
+</ul>
+<p>Por cada tamaño de input (7, 14, 21, 28) se debe entregar una <strong>tabla (en el conjunto de test)</strong> que incluya, idealmente por fold y con su promedio (y std):</p>
+<ul class="simple">
+<li><p><strong>MAPE</strong> (Mean Absolute Percentage Error) — por horizonte y promedio.</p></li>
+<li><p><strong>MAE</strong> (Mean Absolute Error).</p></li>
+<li><p><strong>RMSE</strong> (Root Mean Squared Error).</p></li>
+<li><p><strong>MSE</strong> (Mean Squared Error).</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(p\)</span>-value BDS test</strong> aplicado a los residuos del primer horizonte (<span class="math notranslate nohighlight">\(h=1\)</span>) (por fold) — y su promedio.</p></li>
+</ul>
+<p><strong>Formato recomendado de la tabla (por lag):</strong></p>
+<ul class="simple">
+<li><p>Filas = folds (Fold 1, Fold 2, … , Mean ± Std).</p></li>
+<li><p>Columnas = métricas por horizonte (<span class="math notranslate nohighlight">\(h=1,\dots,7\)</span>) o resumen por horizonte + columna con <strong>BDS_pvalue_h1</strong>.</p></li>
+<li><p><strong>Diagnóstico de residuos</strong></p></li>
+<li><p>En cada fold, calcular residuos en test <span class="math notranslate nohighlight">\(\text{resid} = y_{test}^{\text{real}} - y_{pred}\)</span></p></li>
+<li><p>Aplicar <strong>BDS test</strong> a los residuos del horizonte 1 (test de independencia serial / no-iid).</p></li>
+<li><p>Reportar el <strong><span class="math notranslate nohighlight">\(p\)</span>-value</strong>.</p></li>
+<li><p>Interpretación: <strong><span class="math notranslate nohighlight">\(p &gt; 0.05\)</span> → no rechazo de iid (mejor señal de independencia residual)</strong>.</p></li>
+<li><p><strong>Visualización y análisis</strong></p></li>
+</ul>
+<p>Para cada tamaño de input:</p>
+<ul class="simple">
+<li><p>Dibujar una <strong>curva (time series)</strong> que muestre <strong>train / val / test</strong> (validados con sus timestamps) y las <strong>predicciones correspondientes</strong> (por lo menos para el mejor fold, el peor fold y el fold mediano por RMSE).</p></li>
+<li><p>Etiquetar claramente: <strong>train actual, train predicho, val actual, val predicho, test actual, test predicho</strong>.</p></li>
+<li><p>Gráfica de <strong>RMSE por fold</strong> (e.g., barras) y <strong>RMSE promedio por horizonte</strong> (líneas con 7 puntos).</p></li>
+<li><p><strong>Tabla resumen comparativa</strong> de los 4 tamaños de lag con las métricas solicitadas (MAPE, MAE, RMSE, MSE, p-value BDS).</p></li>
+<li><p>Guardar figuras en <code class="docutils literal notranslate"><span class="pre">notebooks/figs/</span></code> y las tablas en <code class="docutils literal notranslate"><span class="pre">results/</span></code> (CSV).</p></li>
+<li><p><strong>Documentación y deployment</strong></p>
+<ul>
+<li><p>Entregar <strong>notebook reproducible</strong> con todo el pipeline (<strong>EDA → features → CV → entrenamiento → evaluación → residuos → plots</strong>).</p></li>
+<li><p>Entregar <strong>API (<code class="docutils literal notranslate"><span class="pre">app/api.py</span></code>)</strong> que reciba lags y devuelva <strong>7 predicciones de volatilidad</strong> (lista de floats).</p></li>
+<li><p>Incluir <strong>Dockerfile, tests unitarios y README</strong> con instrucciones de uso.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>La ausencia de rechazo en la prueba BDS no demuestra que los residuos sean independientes. Los fragmentos de despliegue siguientes se conservan como plantillas originales; su compatibilidad con una implementación recurrente debe verificarse en el entorno elegido.</p>
+</div>
+<ol class="arabic simple" start="6">
+<li><p><strong>Instrucciones para el entorno de MLOps</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>Para construir el entorno de MLOps correspondiente al problema planteado (<strong>predicción multistep del nivel y/o volatilidad de una serie temporal</strong>, como el precio de criptomonedas o la velocidad del viento), es necesario instalar las bibliotecas asociadas al modelado temporal, deep learning, validación cruzada temporal y análisis de residuos.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--force-reinstall<span class="w"> </span>pydantic
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>fastapi<span class="o">[</span>all<span class="o">]</span>
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>joblib
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pandas
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>scikit-learn
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>matplotlib
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>tsxv
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>arch
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Estructura general del proyecto</p></li>
+</ol>
+<p>La estructura del proyecto debe incluir datos, notebooks, aplicación, pruebas y configuración de despliegue.</p>
+<ol class="arabic simple" start="8">
+<li><p>API con FastAPI (<code class="docutils literal notranslate"><span class="pre">api.py</span></code>)</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;app/model.joblib&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TimeSeriesData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">lags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>   <span class="c1"># Ventanas históricas (ej. últimos valores observados)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/predict&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">TimeSeriesData</span><span class="p">):</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">lags</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">features</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;prediction&quot;</span><span class="p">:</span> <span class="n">prediction</span><span class="o">.</span><span class="n">tolist</span><span class="p">()}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>Dockerfile</p></li>
+</ol>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.10-slim</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+
+<span class="k">COPY</span><span class="w"> </span>app/<span class="w"> </span>./app/
+<span class="k">COPY</span><span class="w"> </span>data/<span class="w"> </span>./data/
+
+<span class="k">EXPOSE</span><span class="w"> </span><span class="s">8000</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;uvicorn&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;app.api:app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--host&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;8000&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="10">
+<li><p>requirements.txt</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>fastapi&gt;=0.95.0
+uvicorn
+scikit-learn
+pandas
+numpy
+joblib
+matplotlib
+tsxv
+arch
+</pre></div>
+</div>
+<ol class="arabic simple" start="11">
+<li><p>CI/CD con GitHub Actions</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CI Pipeline</span>
+<span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.10</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">pip install -r requirements.txt</span>
+<span class="w">          </span><span class="no">pip install pytest flake8</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Linter</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flake8 app/ --ignore=E501,W503</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Tests</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest tests/</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="12">
+<li><p>Pruebas unitarias del modelo</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_model_prediction_shape</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;app/model.joblib&quot;</span><span class="p">)</span>
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_prediction_values</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;app/model.joblib&quot;</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">y_pred</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="13">
+<li><p>Pruebas unitarias de la API</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.testclient</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">app.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_predict_endpoint</span><span class="p">():</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/predict&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;lags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">,</span> <span class="mf">1.35</span><span class="p">]})</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="s2">&quot;prediction&quot;</span> <span class="ow">in</span> <span class="n">data</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;prediction&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;prediction&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">7</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="14">
+<li><p>Prueba local con curl</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/predict<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;lags&quot;: [1.0, 1.2, 1.1, 1.3, 1.25, 1.28, 1.35]}&#39;</span>
+</pre></div>
+</div>
+<p>Salida esperada:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="mf">0.12</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">0.11</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">0.10</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">0.09</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">0.08</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">0.07</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">0.06</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="referencias-de-la-aplicacion">
+<h2>Referencias de la aplicación<a class="headerlink" href="#referencias-de-la-aplicacion" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Chen, S. (2015). <em>Beijing PM2.5</em> [conjunto de datos]. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5JS49">https://doi.org/10.24432/C5JS49</a>.</p></li>
+<li><p><strong>Copia utilizada en el código original:</strong> <a class="reference external" href="https://github.com/lihkir/Data/blob/main/PRSA_data_2010.1.1-2014.12.31.csv">archivo CSV en GitHub</a>.</p></li>
+<li><p><strong>Documentación de Keras:</strong> <a class="reference external" href="https://keras.io/api/layers/recurrent_layers/lstm/">capas LSTM</a> y <a class="reference external" href="https://keras.io/api/callbacks/">callbacks</a>.</p></li>
+<li><p><strong>Proyecto integrador:</strong> se conservan en el enunciado los enlaces originales de Binance, INMET y <code class="docutils literal notranslate"><span class="pre">timeseries-cv</span></code>.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Aplicacion_NLP_Kalbam.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Aplicación de RNN y LSTM al procesamiento del lenguaje natural</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="bibliografia.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Referencias</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definiciones-de-series-de-tiempo">Definiciones de series de tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#formulacion-del-ejemplo">Formulación del ejemplo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-y-alcance">Datos y alcance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-lstm-para-la-prediccion-de-series-de-tiempo">Aplicación: LSTM para la predicción de series de tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proyecto-integrador-de-series-de-tiempo">Proyecto integrador de series de tiempo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proyecto-integrador-de-deep-learning">Proyecto Integrador de Deep Learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#referencias-de-la-aplicacion">Referencias de la aplicación</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Keyla Vanessa Alba Molina
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
