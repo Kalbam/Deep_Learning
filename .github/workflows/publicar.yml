@@ -29,7 +29,7 @@ jobs:
           python-version: "3.11"
 
       - name: Instalar Jupyter Book
-        run: pip install "jupyter-book<2"
+        run: pip install "jupyter-book<2" sphinx-proof
 
       - name: Construir el libro
         run: jupyter-book build .
