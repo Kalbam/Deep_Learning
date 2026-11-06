@@ -1,0 +1,7 @@
+format: jb-book
+root: intro
+chapters:
+  - file: RNN_LSTM_Model_revisado
+  - file: Aplicacion_NLP_Kalbam
+  - file: Aplicacion_Series_Tiempo_Original
+  - file: bibliografia
