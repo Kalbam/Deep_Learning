@@ -27,6 +27,4 @@
 
 Utiliza el **menú lateral** para navegar por los capítulos y la tabla de contenido de cada página para localizar sus secciones.
 
-```{note}
-Las celdas no se ejecutan automáticamente al compilar el libro. La aplicación de NLP conserva el código acordado y utiliza el enlace a la base de Kalbam.
-```
+
