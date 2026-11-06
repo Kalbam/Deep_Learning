@@ -25,6 +25,6 @@
 - **Aplicación a NLP:** representaciones de texto, clasificación de mensajes, demostraciones y proyectos.
 - **Aplicación a series de tiempo:** definiciones, pronóstico con LSTM y proyecto integrador.
 
-Utiliza el **menú lateral** para navegar por los capítulos y la tabla de contenido de cada página para localizar sus secciones.
+
 
 
