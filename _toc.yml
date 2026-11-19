@@ -4,4 +4,6 @@ chapters:
   - file: RNN_LSTM_Model_revisado
   - file: Aplicacion_NLP_Kalbam
   - file: Aplicacion_Series_Tiempo_Original
+  - file: autoencoders_y_VAE
+  - file: transformers
   - file: bibliografia
